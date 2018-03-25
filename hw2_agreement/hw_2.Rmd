@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-tabs <- read_csv('hw2_1_zilo_class.csv')
+tabs <- read_csv('https://github.com/headshoter13/2018_hse_data_analysis/raw/master/hw2_agreement/hw2_1_zilo_class.csv')
 ```
 ```{r}
 tabs %>% 
