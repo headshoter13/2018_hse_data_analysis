@@ -1,0 +1,102 @@
+---
+title: "hw_2"
+output: html_notebook
+---
+### 1.1
+```{r}
+library(tidyverse)
+library(irr)
+library(knitr)
+```
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+tabs <- read_csv('hw2_1_zilo_class.csv')
+```
+```{r}
+tabs %>% 
+  as_tibble() %>% 
+  distinct(stimulus, stimulus_source) %>% 
+  count(stimulus_source)
+
+```
+
+### 1.2
+
+```{r}
+tabs %>% 
+  select(s_id, stimulus, translation_ru, stimulus_source, class) %>% 
+  spread(key = s_id, value = class) ->
+  tabs_short
+agree(tabs_short[,-c(1:3)])
+```
+### 1.3
+
+```{r}
+tabs_2s <- tabs_short[,c(7, 11)]
+kappa2(tabs_2s)
+
+```
+
+### 1.4
+
+```{r}
+kappam.fleiss(tabs_short[,-c(1:3)])
+```
+
+### 1.5
+Согласие было проанализировано с помощью метрик. По результатам анализа, оказалось, что процент полного согласия 75.3%. Значение каппы Коэна составляет 0.856, а каппы Фляйса - 0.856.
+Данные результаты говорят о низкой варитивности присвоения класса для слов.
+
+### 2.1
+
+```{r}
+verbs <- as_tibble(read_csv('hw2_2_verbs.csv'))
+verbs %>%
+  distinct(SubjectCode) %>%
+  summarize(n=n())
+```
+
+### 2.2
+
+```{r}
+verbs %>%
+  group_by(WordType,Gender) %>%
+  summarize(mean=mean(GivenScore))
+```
+
+### 2.3
+
+```{r}
+verbs %>% 
+  select(SubjectCode, Stimulus, WordType, GivenScore) %>%
+  spread(key = SubjectCode, value = GivenScore) %>%
+  na.omit() ->
+  verbs_short
+
+agree(verbs_short[,-c(1:4)])
+
+```
+
+### 2.4
+
+```{r}
+kappam.fleiss(verbs_short[,-c(1:4)])
+```
+
+### 2.5
+
+```{r}
+icc(verbs_short[,-c(1:4)], model = "twoway", type = "agreement")
+```
+
+### 2.6
+```{r}
+Correlation <- as.table(cor(verbs_short[,-c(1:4)], method = "kendall"))
+min(Correlation)
+max(Correlation)
+```
+
